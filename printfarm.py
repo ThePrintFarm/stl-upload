@@ -10,15 +10,16 @@ import json
 from bottle import run, route, template
 
 
-def input_out(k, v):
-    rett = None
-    if type(v) == str:
-        rett = "text"
-    elif type(v) in (int, float):
-        rett = "number"
-    else:
-        rett = "text"
-    return f'<input type="{rett}" id="{k}" name="{k}" value="{v}" />'
+def input_out(d):
+    retv = {}
+    for k, v in d.items():
+        if type(v) in (int, float):
+            retv[k] = {"type": "number", "value": v}
+        elif type(v) == bool:
+            retv[k] = {"type": "checkbox", "value": v}
+        else:
+            retv[k] = {"type": "text", "value": v}
+    return retv
 
 
 @route("/")
@@ -26,7 +27,7 @@ def index():
     retv = {"in_out": input_out}
     if os.path.isfile("goslice.json"):
         with open("goslice.json", "r") as fp:
-            retv = json.loads(fp.read())
+            retv.update(json.loads(fp.read()))
     return template("index", data=retv)
 
 

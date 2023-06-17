@@ -26,16 +26,18 @@ body {
 .column {
   float: left;
   padding: 5px;
+  overflow: scroll;
 }
 
 /* Left and right column */
 .column.side {
-  width: 25%;
+  width: 15%;
 }
 
 /* Middle column */
 .column.middle {
-    width: 75%;
+    width: 85%;
+    padding: 10px;
 }
 
 /* Clear floats after the columns */
@@ -55,7 +57,9 @@ body {
 <script type="application/javascript">
   var optDivs = [
   %for k in data.keys():
+      %if not callable(data[k]) and k != 'GoSlice':
       "{{ k }}",
+      %end
   %end
   ];
 
@@ -80,10 +84,12 @@ body {
 
 <div class="row">
   <div class="column side">
-    <div class="w3-sidebar w3-dark-grey w3-bar-block" style="width:25%">
+    <div class="w3-sidebar w3-dark-grey w3-bar-block" style="width:15%">
       <h3 class="w3-bar-item">Menu</h3>
       %for k in data.keys():
+      %if not callable(data[k]) and k != 'GoSlice':
       <a href="#" class="w3-bar-item w3-button" onclick="toggleDivVisibility('{{ k }}')">{{ k }}</a>
+      %end
       %end
     </div>
   </div>
@@ -92,10 +98,16 @@ body {
     <form action="http://localhost:9999/stl" enctype="multipart/form-data" method="post">
       <input type="file" name="file" id="file">
       %for ka, va in data.items():
+      %if not callable(va) and ka != 'GoSlice':
       <div id="opts-{{ ka }}" style="display: none; padding: 20px;">
         <h2>{{ ka }}</h2>
-        {{ va }}
+        %for k, v in data['in_out'](va).items():
+        <label for="f-{{ k }}">{{ k }}</label>
+        <input type="{{ v['type'] }}" id="f-{{ k }}" name="f-{{ k }}" value="{{ v }}" />
+        <br />
+        %end
       </div>
+      %end
       %end
       <input type="submit" value="Upload" name="submit">
     </form>
