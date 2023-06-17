@@ -99,14 +99,28 @@ body {
       <input type="file" name="file" id="file">
       %for ka, va in data.items():
       %if not callable(va) and ka != 'GoSlice':
+      <!-- start of {{ ka }}'s content -->
       <div id="opts-{{ ka }}" style="display: none; padding: 20px;">
         <h2>{{ ka }}</h2>
         %for k, v in data['in_out'](va).items():
+        %if v['type'] != 'fieldset':
         <label for="f-{{ k }}">{{ k }}</label>
-        <input type="{{ v['type'] }}" id="f-{{ k }}" name="f-{{ k }}" value="{{ v }}" />
-        <br />
+        <input type="{{ v['type'] }}" id="f-{{ k }}" name="f-{{ k }}" value="{{ v['value'] }}" /><br />
+        %else:
+        <fieldset style="width: 50%;">
+          <legend>{{ k }}</legend>
+          %for k2, v2 in v['value'].items():
+          <label for="f-{{ k2 }}">{{ k2 }}</label>
+          <input type="{{ v2['type'] }}" id="f-{{ k2 }}" name="f-{{ k2 }}" value="{{ v2['value'] }}" /><br />
+          %end
+          <!-- endfor -->
+        </fieldset>
         %end
+        <!-- endif -->
+        %end
+        <!-- endfor -->
       </div>
+      <!-- End of {{ ka }}'s content -->
       %end
       %end
       <input type="submit" value="Upload" name="submit">

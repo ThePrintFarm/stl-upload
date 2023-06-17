@@ -17,6 +17,10 @@ def input_out(d):
             retv[k] = {"type": "number", "value": v}
         elif type(v) == bool:
             retv[k] = {"type": "checkbox", "value": v}
+        elif type(v) == dict:
+            retv[k] = {"type": "fieldset", "value": input_out(v)}
+        elif type(v) in (list, tuple):
+            retv[k] = {"type": "select", "value": input_out(v)}
         else:
             retv[k] = {"type": "text", "value": v}
     return retv
