@@ -10,7 +10,7 @@ import json
 from bottle import run, route, template
 
 
-def input_out(d):
+def json2form(d):
     retv = {}
     for k, v in d.items():
         if type(v) in (int, float):
@@ -18,21 +18,46 @@ def input_out(d):
         elif type(v) == bool:
             retv[k] = {"type": "checkbox", "value": v}
         elif type(v) == dict:
-            retv[k] = {"type": "fieldset", "value": input_out(v)}
+            retv[k] = {"type": "fieldset", "value": json2form(v)}
         elif type(v) in (list, tuple):
-            retv[k] = {"type": "select", "value": input_out(v)}
+            retv[k] = {"type": "select", "value": json2form(v)}
         else:
             retv[k] = {"type": "text", "value": v}
     return retv
 
 
-@route("/")
-def index():
-    retv = {"in_out": input_out}
+@route("/goslice")
+def goslice():
+    retv = {"json2form": json2form}
     if os.path.isfile("goslice.json"):
         with open("goslice.json", "r") as fp:
             retv.update(json.loads(fp.read()))
-    return template("index", data=retv)
+    return template("index", data=retv, engine="goslice")
+
+
+@route("/cura")
+def cura():
+    retv = {"json2form": json2form}
+    if os.path.isfile("cura.csv"):
+        # call the translate service and upload this settings file, then
+        # use the return value to populate the template data
+        pass
+    return template("index", data=retv, engine="cura")
+
+
+@route("/prusa")
+def prusa():
+    retv = {"json2form": json2form}
+    if os.path.isfile("prusa.ini"):
+        # call the translate service and upload this settings file, then
+        # use the return value to populate the template data
+        pass
+    return template("index", data=retv, engine="prusa")
+
+
+@route("/")
+def index():
+    return template("index", data={"json2form": json2form})
 
 
 if __name__ == "__main__":

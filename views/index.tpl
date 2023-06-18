@@ -24,13 +24,13 @@ body {
 
 /* Create three unequal columns that floats next to each other */
 .column {
-  float: left;
+  float: right;
   padding: 5px;
-  overflow: scroll;
 }
 
 /* Left and right column */
-.column.side {
+.column-side {
+    padding: 5px
   width: 15%;
 }
 
@@ -83,26 +83,24 @@ body {
 </div>
 
 <div class="row">
-  <div class="column side">
-    <div class="w3-sidebar w3-dark-grey w3-bar-block" style="width:15%">
-      <h3 class="w3-bar-item">Menu</h3>
-      %for k in data.keys():
-      %if not callable(data[k]) and k != 'GoSlice':
-      <a href="#" class="w3-bar-item w3-button" onclick="toggleDivVisibility('{{ k }}')">{{ k }}</a>
-      %end
-      %end
-    </div>
+  <div class="column-side w3-sidebar w3-dark-grey w3-bar-block" style="width:15%">
+    <h3 class="w3-bar-item">Menu</h3>
+    %for k in data.keys():
+    %if not callable(data[k]) and k != 'GoSlice':
+    <a href="#" class="w3-bar-item w3-button" onclick="toggleDivVisibility('{{ k }}')">{{ k }}</a>
+    %end
+    %end
   </div>
 
   <div class="column middle" style="padding: 10px;">
-    <form action="http://localhost:9999/stl" method="post">
+    <form action="http://localhost:9999/stl/{{ engine }}" enctype="multipart/form-data" method="post">
       <input type="file" name="file" id="file">
       %for ka, va in data.items():
       %if not callable(va) and ka != 'GoSlice':
       <!-- start of {{ ka }}'s content -->
       <div id="opts-{{ ka }}" style="display: none; padding: 20px;">
         <h2>{{ ka }}</h2>
-        %for kb, vb in data['in_out'](va).items():
+        %for kb, vb in data['json2form'](va).items():
         %if vb['type'] != 'fieldset':
         <label for=".{{ ka }}.{{ kb }}">{{ kb }}</label>
         <input type="{{ vb['type'] }}" id=".{{ ka }}.{{ kb }}" name=".{{ ka }}.{{ kb }}" value="{{ vb['value'] }}" /><br />
