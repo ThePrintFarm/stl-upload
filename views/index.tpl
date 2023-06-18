@@ -95,7 +95,7 @@ body {
   </div>
 
   <div class="column middle" style="padding: 10px;">
-    <form action="http://localhost:9999/stl" enctype="multipart/form-data" method="post">
+    <form action="http://localhost:9999/stl" method="post">
       <input type="file" name="file" id="file">
       %for ka, va in data.items():
       %if not callable(va) and ka != 'GoSlice':
