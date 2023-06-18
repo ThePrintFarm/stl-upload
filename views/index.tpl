@@ -102,16 +102,16 @@ body {
       <!-- start of {{ ka }}'s content -->
       <div id="opts-{{ ka }}" style="display: none; padding: 20px;">
         <h2>{{ ka }}</h2>
-        %for k, v in data['in_out'](va).items():
-        %if v['type'] != 'fieldset':
-        <label for="f-{{ k }}">{{ k }}</label>
-        <input type="{{ v['type'] }}" id="f-{{ k }}" name="f-{{ k }}" value="{{ v['value'] }}" /><br />
+        %for kb, vb in data['in_out'](va).items():
+        %if vb['type'] != 'fieldset':
+        <label for=".{{ ka }}.{{ kb }}">{{ kb }}</label>
+        <input type="{{ vb['type'] }}" id=".{{ ka }}.{{ kb }}" name=".{{ ka }}.{{ kb }}" value="{{ vb['value'] }}" /><br />
         %else:
         <fieldset style="width: 50%;">
-          <legend>{{ k }}</legend>
-          %for k2, v2 in v['value'].items():
-          <label for="f-{{ k2 }}">{{ k2 }}</label>
-          <input type="{{ v2['type'] }}" id="f-{{ k2 }}" name="f-{{ k2 }}" value="{{ v2['value'] }}" /><br />
+          <legend>{{ kb }}</legend>
+          %for kc, vc in vb['value'].items():
+          <label for=".{{ ka }}.{{ kb }}.{{ kc }}">{{ kc }}</label>
+          <input type="{{ vc['type'] }}" id=".{{ ka }}.{{ kb }}.{{ kc }}" name=".{{ ka }}.{{ kb }}.{{ kc }}" value="{{ vc['value'] }}" /><br />
           %end
           <!-- endfor -->
         </fieldset>
