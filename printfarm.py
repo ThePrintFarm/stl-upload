@@ -32,7 +32,12 @@ def goslice():
     if os.path.isfile("goslice.json"):
         with open("goslice.json", "r") as fp:
             retv.update(json.loads(fp.read()))
-    return template("index", data=retv, engine="goslice")
+    return template(
+        "index",
+        data=retv,
+        engine="goslice",
+        endpoint=os.getenv("SLICER_ENDPOINT", "localhost:9999"),
+    )
 
 
 @route("/cura")
@@ -61,7 +66,9 @@ def index():
 
 
 if __name__ == "__main__":
-    run(host="0.0.0.0", port=8080, reloader=True, debug=True)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = os.getenv("PORT", 8080)
+    run(host=host, port=port, reloader=True, debug=True)
 
 # <html>
 #   <head>
